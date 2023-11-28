@@ -1,4 +1,4 @@
-﻿@model KhaccThienn_Ecommerce.Models.DataModels.Product
+﻿@model KhaccThienn_Ecommerce.Models.DataModels.Review
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
@@ -129,7 +129,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="inner-content">
-                    <h2>Details of: @Model.Name</h2>
+                    <h2>Details of: @ViewBag.product.Name</h2>
                 </div>
             </div>
         </div>
@@ -138,24 +138,26 @@
 <!-- ***** Product Area Starts ***** -->
 <section class="section" id="product">
     <div class="container">
-        <span class="text-muted font-weight-bold">Id: @Model.Id</span>
+
+        <span class="text-muted font-weight-bold">Id: @ViewBag.product.Id</span>
+
         <div class="row">
 
             <div class="col-lg-8">
                 <div class="left-images">
-                    <img src="~/Uploads/product/@Model.Image" alt="">
+                    <img src="~/Uploads/product/@ViewBag.product.Image" alt="">
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="right-content">
-                    <h4>@Model.Name</h4>
-                    @if (Model.SalePrice > 0)
+                    <h4>@ViewBag.product.Name</h4>
+                    @if (ViewBag.product.SalePrice > 0)
                     {
-                        <span class="price text-success">$ @Model.SalePrice - <del class="text-secondary">$ @Model.Price</del></span>
+                        <span class="price text-success">$ @ViewBag.product.SalePrice - <del class="text-secondary">$ @ViewBag.product.Price</del></span>
                     }
                     else
                     {
-                        <span class="price">$ @Model.Price </span>
+                        <span class="price">$ @ViewBag.product.Price </span>
                     }
                     <ul class="stars">
                         <li><i class="fa fa-star"></i></li>
@@ -165,7 +167,7 @@
                         <li><i class="fa fa-star"></i></li>
                     </ul>
                     <span class="d-inline-block">
-                        Status: @if (Model.Status == 1)
+                        Status: @if (ViewBag.product.Status == 1)
                         {
                             <span class="text-success d-inline">In Stock</span>
                         }
@@ -175,10 +177,10 @@
                         }
                     </span>
                     <p>
-                        Category: <a asp-controller="Product" asp-action="Index" asp-route-cateId="@Model.Category.Id">@Model.Category.Name</a>
+                        Category: <a asp-controller="Product" asp-action="Index" asp-route-cateId="@ViewBag.product.Category.Id">@ViewBag.product.Category.Name</a>
                     </p>
                     <div class="quote">
-                        <i class="fa fa-quote-left"></i><p>@Model.Descriptions</p>
+                        <i class="fa fa-quote-left"></i><p>@ViewBag.product.Descriptions</p>
                     </div>
                     @if (userFound != null)
                     {
@@ -190,7 +192,7 @@
                                 <div class="right-content">
                                     <div class="quantity buttons_added">
                                         <input type="hidden" name="accId" value="@userFound.Id" />
-                                        <input type="hidden" name="prodId" value="@Model.Id" />
+                                        <input type="hidden" name="prodId" value="@ViewBag.product.Id" />
                                         <input type="button" value="-" class="minus" onclick="handleMinus();">
                                         <input type="number" step="1" min="1" max="" name="quantity" value="1" id="quantity" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="">
                                         <input type="button" value="+" class="plus" onclick="handlePlus();">
@@ -210,63 +212,89 @@
                 </div>
             </div>
         </div>
-        @* <div class="row">
+
+
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card-body text-center">
-                    <h3 class="card-title">Latest Comments</h3>
+                    <h3 class="card-title">Latest Comments (@ViewBag.reviewByProd.Count)</h3>
                 </div>
                 <div class="comment-widgets">
+                    @if (ViewBag.reviewByProd.Count > 0)
+                    {
+                        @foreach (var cmt in ViewBag.reviewByProd)
+                        {
+                            <!-- Comment Row -->
+                            <div class="d-flex flex-row comment-row m-t-0">
+                                <div class="p-2">
+                                    <img src="~/Uploads/user/@(string.IsNullOrEmpty(@cmt.User.Avatar) ? "default.png" : @cmt.User.Avatar)" alt="@cmt.User.LastName" width="50" class="rounded-circle">
+                                </div>
+                                <div class="comment-text w-100">
+                                    <h6 class="font-medium">@(cmt.User.FirstName + " " + cmt.User.LastName)</h6>
+                                    <p class="text-muted">@cmt.Title </p>
 
-
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row m-t-0">
-                        <div class="p-2">
-                            <img src="https://i.imgur.com/Ur43esv.jpg" alt="user" width="50" class="rounded-circle">
-                        </div>
-                        <div class="comment-text w-100">
-                            <h6 class="font-medium">James Thomas</h6>
-                            <p class="text-muted">Title goes here </p>
-
-                            <span>This is awesome website. I would love to comeback again. </span>
-                            <div class="comment-footer">
-                                <span class="text-muted float-right">April 14, 2019</span>
-                                @* <button type="button" class="btn btn-danger btn-sm">Delete</button> *@
+                                    <span>@cmt.Subject </span>
+                                    <div class="comment-footer">
+                                        <span class="text-muted float-right">
+                                            @if (cmt.UserId == userFound?.Id)
+                                            {
+                                                <form asp-controller="Product" asp-action="DeleteComment" method="post">
+                                                    <input name="previousUrl" type="hidden" value="@HttpContextAccessor.HttpContext.Request.Path" />
+                                                    <input name="Id" type="hidden" value="@cmt.Id" />
+                                                    <button type="submit" class="btn btn-danger rounded-0 btn-sm">Delete</button>
+                                                </form>
+                                            }
+                                            @cmt.Created_Date.ToString("ddd, dd MMM yyyy") at @cmt.Created_Date.ToString("h:mm tt"), GMT @cmt.Created_Date.ToString("zzz")
+                                        </span>
+                                        
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <hr />
+                            <hr />
+                        }
+                        
+                    } else
+                    {
+                        <p>Be the first to leave a comment. !</p>
+                    }
+
+                   
 
                     @if (userFound != null)
                     {
                         <form class="form-block mt-3" asp-controller="Product" asp-action="PostComment" method="post">
+                            <input name="previousUrl" type="hidden" value="@HttpContextAccessor.HttpContext.Request.Path"/>
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input type="hidden" name="ProductId" value="@Model.Id" />
-                            <input type="hidden" name="UserId" value="@userFound.Id" />
+                            <input type="hidden" asp-for="ProductId" value="@ViewBag.product.Id" />
+                            <input type="hidden" asp-for="UserId" value="@userFound.Id" />
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group fl_icon">
                                         <div class="icon"><i class="fa fa-envelope"></i></div>
-                                        <input class="form-input rounded-0" type="text" placeholder="Title">
+                                        <input class="form-input rounded-0" type="text" placeholder="Title" asp-for="Title">
+                                        <span class="text-danger" asp-validation-for="Title"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <textarea class="form-control rounded-0" rows="6" placeholder="Your Subject"></textarea>
+                                    <textarea class="form-control rounded-0" rows="6" placeholder="Your Subject" asp-for="Subject"></textarea>
+                                    <span class="text-danger" asp-validation-for="Subject"></span>
+
                                 </div>
                             </div>
                             <button class="btn btn-outline-secondary mt-2 rounded-0">
                                 Submit
                             </button>
-                        </form>                        
+                        </form>
                     }
                     else
                     {
                         <a class="btn btn-outline-secondary btn-sm btn-block main-button-border rounded-0 mt-3" asp-controller="User" asp-action="Login">Login To Posting Your Comment !</a>
                     }
 
-                    
+
                 </div>
             </div>
-        </div> *@
+        </div>
 
     </div>
 
