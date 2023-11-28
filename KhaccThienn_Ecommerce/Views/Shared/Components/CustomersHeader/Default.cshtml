@@ -1,0 +1,63 @@
+﻿@model IEnumerable<KhaccThienn_Ecommerce.Models.DataModels.Category>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    var userFound = ViewBag.userFound;
+}
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a asp-controller="Home" asp-action="Index" class="logo">
+                        <img src="~/assets/images/logo.png">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li class="scroll-to-section"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="scroll-to-section"><a asp-controller="About" asp-action="Index">About Us</a></li>
+                        <li class="scroll-to-section"><a asp-controller="Product" asp-action="Index">Products</a></li>
+                        <li class="submenu">
+                            <a href="javascript:;">Categories</a>
+                            <ul>
+                                @foreach (var item in Model)
+                                {
+
+                                    <li>
+                                        <a asp-controller="Product" asp-action="Index" asp-route-cateId="@item.Id">
+                                            @item.Name
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="scroll-to-section"><a asp-controller="Contact" asp-action="Index">Contact Us</a></li>
+                        @if (userFound != null)
+                        {
+                            <li class="submenu">
+                                <a href="javascript:;">Welcome back, @userFound.LastName</a>
+                                <ul>
+                                    <li class="scroll-to-section"><a asp-controller="User" asp-action="Details">Your Portfolio</a></li>
+                                    <li class="scroll-to-section"><a asp-controller="Cart" asp-action="Index">Your Cart</a></li>
+                                    <li class="scroll-to-section"><a asp-controller="Order" asp-action="Index">Your Orders</a></li>
+                                    <li class="scroll-to-section"><a asp-controller="User" asp-action="LogOut">Log Out</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="scroll-to-section"><a asp-controller="User" asp-action="Login">Login</a></li>
+                        }
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

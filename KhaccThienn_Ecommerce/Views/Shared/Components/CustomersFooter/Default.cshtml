@@ -1,0 +1,114 @@
+﻿@model IEnumerable<KhaccThienn_Ecommerce.Models.DataModels.Category>
+<!-- ***** Subscribe Area Starts ***** -->
+<div class="subscribe">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="section-heading">
+                    <h2>By Subscribing To Our Newsletter You Can Get 30% Off</h2>
+                </div>
+                <form id="subscribe" action="" method="get">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <fieldset>
+                                <input name="name" type="text" id="name" placeholder="Your Name" required="">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-5">
+                            <fieldset>
+                                <input name="email" type="text" id="email" placeholder="Your Email Address" required="">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-2">
+                            <fieldset>
+                                <button type="submit" id="form-submit" class="main-dark-button"><i class="fa fa-paper-plane"></i></button>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-6">
+                        <ul>
+                            <li>Store Location:<br><span>HTC Building, 250 Hoang Quoc Viet, Co Nhue, Cau Giay, Ha Noi</span></li>
+                            <li>Phone:<br><span>(+84) - 392 - 689 - 213</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul>
+                            <li>Work Hours:<br><span>07:30 AM - 9:30 PM Daily</span></li>
+                            <li>Email:<br><span>muzankibut@gmail.com</span></li>
+                            <li>Social Media:<br><span><a href="#">Facebook</a>, <a href="#">Instagram</a>, <a href="#">Behance</a>, <a href="#">Linkedin</a></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Subscribe Area Ends ***** -->
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="first-item">
+                    <div class="logo">
+                        <img src="~/assets/images/white-logo.png" alt="hexashop ecommerce">
+                    </div>
+                    <ul>
+                        <li><a href="#">238 Hoang Quoc Viet - Cau Giay - Ha Noi</a></li>
+                        <li><a href="#">muzankibut@gmail.com</a></li>
+                        <li><a href="#">(+84) 392 689 213</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <h4>Shopping &amp; Categories</h4>
+                <ul>
+                    @foreach (var item in Model)
+                    {
+
+                        <li>
+                            <a href="">
+                                @item.Name Shopping
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Homepage</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <h4>Help &amp; Information</h4>
+                <ul>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">FAQ's</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Tracking ID</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-12">
+                <div class="under-footer">
+                    <p>
+                        Copyright © 2023 HexaShop Co., Ltd. All Rights Reserved.
+                    </p>
+                    <ul>
+                        <li><a href="https://www.facebook.com/khacc.thienn.nee" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="mailto:muzankibut112@gmail.com" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="https://github.com/KhaccThienn" target="_blank"><i class="fa fa-github"></i></a></li>
+                        <li><a href="https://soundcloud.com/dj-khac-thienn/tracks" target="_blank"><i class="fa fa-soundcloud"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

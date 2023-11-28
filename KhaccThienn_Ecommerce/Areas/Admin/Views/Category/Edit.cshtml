@@ -1,0 +1,65 @@
+﻿@model KhaccThienn_Ecommerce.Models.DataModels.Category
+
+@{
+    ViewData["Title"] = "Update Category";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h4>Update Category</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Created_Date" />
+            <input type="hidden" name="oldImage" value="@Model.Image" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" class="form-control" name="fileUpload" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="w-25">
+                <label class="control-label">Old Image</label>
+                <img src="~/Uploads/category/@Model.Image" class="card-img" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control">
+                    <option value="1" selected="@(Model.Status == 1)">Show</option>
+                    <option value="0" selected="@(Model.Status == 0)">Hide</option>
+                </select>
+
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary btn-block rounded-0" />
+            </div>
+        </form>
+    </div>
+
+    @* @foreach (var modelState in ViewData.ModelState.Values)
+    {
+        foreach (var error in modelState.Errors)
+        {
+            <p>
+                @error.ErrorMessage
+            </p>
+        }
+    } *@
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary rounded-0">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,44 @@
+﻿@model KhaccThienn_Ecommerce.Models.DataModels.Role
+
+@{
+    ViewData["Title"] = "Delete Role";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Descriptions)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descriptions)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Created_Date)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Created_Date != null ? Model.Created_Date.Value.ToString("dd / MM / yyyy hh:mm:ss") : "Null")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Updated_Date != null ? Model.Updated_Date.Value.ToString("dd / MM / yyyy hh:mm:ss") : "Null")
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-outline-danger rounded-0" /> |
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-0">Back to List</a>
+    </form>
+</div>

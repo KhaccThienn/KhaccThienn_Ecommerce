@@ -1,0 +1,78 @@
+﻿@model KhaccThienn_Ecommerce.Models.DataModels.Product
+
+@{
+    ViewData["Title"] = "Details Product";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div>
+    <h4>Details of Product: @Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class="col-sm-10">
+            <img class="card-img" width="250px" src="~/Uploads/product/@Model.Image" />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalePrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalePrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Status == 1)
+            {
+                <span class="badge badge-success">In Stock</span>
+            } else
+            {
+                <span class="badge badge-danger">Out Of Stock</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Descriptions)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descriptions)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Created_Date)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Created_Date != null ? Model.Created_Date.Value.ToString("dd / MM / yyyy hh:mm:ss") : "Null")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Updated_Date != null ? Model.Updated_Date.Value.ToString("dd / MM / yyyy hh:mm:ss") : "Null")
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-outline-success rounded-0" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a class="btn btn-outline-secondary rounded-0" asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,161 @@
+﻿@model X.PagedList.IPagedList<KhaccThienn_Ecommerce.Models.DataModels.Product>
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Shop Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var userFound = ViewBag.userFound;
+    var names = ViewBag.names;
+    var sorts = ViewBag.sorts;
+
+    var categories = ViewBag.categories;
+}
+
+
+<!-- ***** Main Banner Area Start ***** -->
+<div class="page-heading" id="top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner-content">
+                    <h2>Check Our Products</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Main Banner Area End ***** -->
+<!-- ***** Products Area Starts ***** -->
+<section class="section container-fluid" id="products">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    <h2>Our Latest Products</h2>
+                    <span>Check out all of our products.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container col-lg-4">
+            @if (!string.IsNullOrEmpty(names) || !string.IsNullOrEmpty(sorts))
+            {
+                <a asp-controller="Product" asp-action="Index" class="btn rounded-0 btn-warning">Clear Search....</a>
+            }
+            <form method="get">
+                <div class="row p-3">
+                    <h4 class="pb-2">Searching...</h4>
+
+                    <input class="col-lg-10 form-control rounded-0" value="@names" name="name" placeholder="Find by name...." />
+                    <button class="col-lg-2 btn rounded-0 btn-outline-secondary" type="submit">Find....</button>
+                </div>
+
+
+                <hr />
+                <div class="row p-3">
+                    <h4 class="pb-2">Sorting</h4>
+                    <select class="form-control rounded-0 col-lg-10" name="sort">
+                        <option value="" hidden>----- Order By -----</option>
+                        <option value="Id-ASC" selected="@(sorts == "Id-ASC")">Sorting By Id (a - z)</option>
+                        <option value="Id-DESC" selected="@(sorts == "Id-DESC")">Sorting By Id (z - a)</option>
+                        <option value="Name-ASC" selected="@(sorts == "Name-ASC")">Sorting By Name (a - z)</option>
+                        <option value="Name-DESC" selected="@(sorts == "Name-DESC")">Sorting By Name (z - a)</option>
+                        <option value="CreatedDate-ASC" selected="@(sorts == "CreatedDate-ASC")">Sorting By Date Created (a - z)</option>
+                        <option value="CreatedDate-DESC" selected="@(sorts == "CreatedDate-DESC")">Sorting By Date Created (z - a)</option>
+                        <option value="UpdatedDate-ASC" selected="@(sorts == "UpdatedDate-ASC")">Sorting By Date Updated (a - z)</option>
+                        <option value="UpdatedDate-DESC" selected="@(sorts == "UpdatedDate-DESC")">Sorting By Date Updated (z - a)</option>
+                    </select>
+                    <button type="submit" class="btn rounded-0 col-lg-2 btn-outline-secondary">Find....</button>
+                </div>
+
+            </form>
+            <hr />
+            <div class="sections_category">
+                <h4 class="pb-2">Categories</h4>
+                <ul class="list-group rounded-0">
+                    @foreach (var item in categories)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a asp-controller="Product" asp-action="Index" asp-route-cateId="@item.Id" class="text-secondary">
+                                @item.Name
+                            </a>
+                            <span class="badge badge-secodary badge-pill"> @item.Products.Count</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="container col-lg-8">
+            <div class="row">
+                @if (Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <div class="col-lg-4">
+                            <div class="item">
+                                <div class="thumb">
+                                    <div class="hover-content">
+                                        <ul>
+                                            <li><a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye"></i></a></li>
+
+                                        </ul>
+                                    </div>
+                                    <img src="~/Uploads/product/@item.Image" alt="">
+                                </div>
+                                <div class="down-content">
+                                    <h4>@item.Name</h4>
+                                    @if (item.SalePrice > 0)
+                                    {
+                                        <span>$ @item.SalePrice - <del>$ @item.Price</del></span>
+                                    }
+                                    else
+                                    {
+                                        <span>$ @item.Price </span>
+                                    }
+                                    <ul class="stars">
+                                        @if (userFound != null)
+                                        {
+                                            <li>
+                                                <form asp-controller="Cart" asp-action="AddToCart">
+                                                    <input type="hidden" name="accId" value="@userFound.Id" />
+                                                    <input type="hidden" name="prodId" value="@item.Id" />
+
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button type="submit" class="fa fa-shopping-cart btn btn-outline-secondary rounded-0" title="Add To Cart">
+                                                    </button>
+                                                </form>
+                                                @* <a asp-controller="Cart"
+                                    asp-action="AddToCart"
+                                    asp-route-accId="@User?.Claims?.Take(0)?.FirstOrDefault()?.Value"
+                                    asp-route-prodId="@item.Id"></a> *@
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="container">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+                            new X.PagedList.Web.Common.PagedListRenderOptions
+                            {
+                                LiElementClasses = new string[] { "page-item" },
+                                PageClasses = new string[] { "page-link",  "rounded-0" }
+                            }
+                        )
+                    </div>
+                }
+                else
+                {
+                    <p>Nothing to show here</p>
+                }
+
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- ***** Products Area Ends ***** -->

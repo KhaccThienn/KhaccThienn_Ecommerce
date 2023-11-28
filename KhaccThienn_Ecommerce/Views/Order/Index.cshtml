@@ -1,0 +1,82 @@
+﻿@model IEnumerable<KhaccThienn_Ecommerce.Models.DataModels.Order>
+
+@{
+    ViewData["Title"] = "List Ordered";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- ***** Main Banner Area Start ***** -->
+<div class="page-heading about-page-heading" id="top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner-content">
+                    <h2>
+                        Ordered History
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Main Banner Area End ***** -->
+<div class="container-fluid">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    #Order
+                </th>
+                <td>
+                    Delivered To
+                </td>
+                <td>
+                    Delivered Address
+                </td>
+
+                <td>
+                    Delivered Phone
+                </td>
+                <td>
+                    Items Count
+                </td>
+                <td>
+                    Sub Total ?
+                </td>
+                <td>
+                    Order Status
+                </td>
+                <td>
+                    Order Date
+                </td>
+                <td>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        #@item.Id
+                    </th>
+                    <td>
+                        @item.DeliverUser
+                    </td>
+                    <td>@item.DeliverAddress</td>
+                    <td>@item.DeliverPhone</td>
+                    <td>@item.OrderDetails?.Count item(s)</td>
+                    <td>
+                        @String.Format("{0:C}", item.TotalPrice)
+                    </td>
+                    <td>@item.Status</td>
+                    <td>@item.Created_Date</td>
+                    <td>
+                        <a asp-controller="Order" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success rounded-0">View Details</a>
+                        <a asp-controller="Order" asp-action="CancelOrder" asp-route-id="@item.Id" class="btn btn-outline-danger rounded-0">Cancel Order</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
