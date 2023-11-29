@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using KhaccThienn_Ecommerce.Data;
 using KhaccThienn_Ecommerce.Models.DataModels;
 using Microsoft.AspNetCore.Authorization;
@@ -153,6 +154,40 @@ namespace KhaccThienn_Ecommerce.Controllers
                     return Redirect(previousUrl);
                 }
                 _toastNotification.Error("Delete Comment Failed !", 2);
+                return Redirect(previousUrl);
+            }
+            else
+            {
+                //return RedirectToAction("Login", "User");
+                return RedirectToAction("Login", "User", new { returnUrl = previousUrl });
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetComment(int id)
+        {
+            Console.WriteLine($"CMT Id:{id}");
+            var cmtFound = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
+
+            return Json(cmtFound);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateComment(string previousUrl, [Bind("Id, Title, Subject, ProductId, UserId, Created_Date")] Review model)
+        {
+            if (HttpContext.Session.GetInt32("userID") != null)
+            {
+                if (ModelState.IsValid)
+                {
+
+                    model.Updated_Date = DateTime.Now;
+                    _context.Update(model);
+                    await _context.SaveChangesAsync();
+                    _toastNotification.Success("Update Comment Success !", 2);
+                    return Redirect(previousUrl);
+                }
+                _toastNotification.Error("Update Comment Failed !", 2);
                 return Redirect(previousUrl);
             }
             else

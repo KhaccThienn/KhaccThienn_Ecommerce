@@ -234,36 +234,89 @@
                                     <p class="text-muted">@cmt.Title </p>
 
                                     <span>@cmt.Subject </span>
+                                    
                                     <div class="comment-footer">
-                                        <span class="text-muted float-right">
-                                            @if (cmt.UserId == userFound?.Id)
-                                            {
+                                        @if (cmt.UserId == userFound?.Id)
+                                        {
+                                            <div class="row">
+
+                                                <!-- Button trigger modal -->
+                                                <button type="button" data-id="@cmt.Id" class="btn btn-outline-primary rounded-0 btn-sm" id="editComment" data-toggle="modal" data-target="#exampleModal">
+                                                    Edit Comment
+                                                </button>
                                                 <form asp-controller="Product" asp-action="DeleteComment" method="post">
                                                     <input name="previousUrl" type="hidden" value="@HttpContextAccessor.HttpContext.Request.Path" />
                                                     <input name="Id" type="hidden" value="@cmt.Id" />
                                                     <button type="submit" class="btn btn-danger rounded-0 btn-sm">Delete</button>
                                                 </form>
-                                            }
+                                            </div>
+
+                                        }
+                                        <span class="text-muted float-right">
+                                            
                                             @cmt.Created_Date.ToString("ddd, dd MMM yyyy") at @cmt.Created_Date.ToString("h:mm tt"), GMT @cmt.Created_Date.ToString("zzz")
                                         </span>
-                                        
+
                                     </div>
                                 </div>
                             </div>
                             <hr />
                         }
-                        
-                    } else
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edit Comment</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-block mt-3" asp-controller="Product" asp-action="UpdateComment" method="post">
+                                            <input name="previousUrl" type="hidden" value="@HttpContextAccessor.HttpContext.Request.Path" />
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <input type="hidden" asp-for="Id" name="Id" id="CmtId" />
+                                            <input type="hidden" asp-for="ProductId" name="ProductId" id="ProductId" />
+                                            <input type="hidden" asp-for="UserId" name="UserId" id="UserId" />
+                                            <input type="hidden" asp-for="Created_Date" name="Created_Date" id="Created_Date" />
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group fl_icon">
+                                                        <div class="icon"><i class="fa fa-envelope"></i></div>
+                                                        <input class="form-input rounded-0" type="text" placeholder="Title" id="CmtTitle" asp-for="Title">
+                                                        <span class="text-danger" asp-validation-for="Title"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <textarea class="form-control rounded-0" rows="6" placeholder="Your Subject" id="CmtSubject" asp-for="Subject"></textarea>
+                                                    <span class="text-danger" asp-validation-for="Subject"></span>
+
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-outline-secondary mt-2 rounded-0">
+                                                Submit
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
                     {
                         <p>Be the first to leave a comment. !</p>
                     }
 
-                   
+
 
                     @if (userFound != null)
                     {
                         <form class="form-block mt-3" asp-controller="Product" asp-action="PostComment" method="post">
-                            <input name="previousUrl" type="hidden" value="@HttpContextAccessor.HttpContext.Request.Path"/>
+                            <input name="previousUrl" type="hidden" value="@HttpContextAccessor.HttpContext.Request.Path" />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="ProductId" value="@ViewBag.product.Id" />
                             <input type="hidden" asp-for="UserId" value="@userFound.Id" />
@@ -302,6 +355,34 @@
 <!-- ***** Product Area Ends ***** -->
 @section Scripts {
     <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#editComment").click(function () {
+                $.ajax({
+                    url: '@Url.Action("GetComment")', // to get the right path to controller from TableRoutes of Asp.Net MVC
+                    dataType: "json", //to work with json format
+                    type: "GET", //to do a post request
+                    contentType: 'application/json; charset=utf-8', //define a contentType of your request
+                    cache: false, //avoid caching results
+                    async: true,
+                    data: { id: $(this).attr('data-id') }, // here you can pass arguments to your request if you need
+                    success: function (data) {
+                        console.log(data);
+                        $("#CmtId").val(data.id);
+                        $("#CmtTitle").val(data.title);
+                        $("#CmtSubject").val(data.subject);
+                        $("#ProductId").val(data.productId);
+                        $("#UserId").val(data.userId);
+                        $("#Created_Date").val(data.created_Date);
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            });
+        });
+
+
         var quantityDOM = document.getElementById("quantity");
 
         const handleMinus = () => {
