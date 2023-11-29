@@ -21,6 +21,8 @@
                 <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="d-block">
                     Welcoming Back, @User.Identity.Name !
                 </a>
+                <a asp-area="Admin" asp-controller="Logging" asp-action="Details">View Details</a>
+                <span class="text-white">•</span>
                 <a asp-area="Admin" asp-controller="Logging" asp-action="Logout">Logout</a>
             </div>
         </div>
@@ -80,6 +82,7 @@
                     </ul>
                 </li>
                 <!--Category Navigator Link End-->
+
                 <!--Product Navigator Link-->
                 <li class="nav-item menu-open">
                     <a class="nav-link active">
@@ -106,6 +109,7 @@
                     </ul>
                 </li>
                 <!--Product Navigator Link End-->
+
                 <!--User Navigator Link-->
                 <li class="nav-item menu-open">
                     <a class="nav-link active">
@@ -132,6 +136,7 @@
                     </ul>
                 </li>
                 <!--User Navigator Link End-->
+
                 <!--Role Navigator Link-->
                 <li class="nav-item menu-open">
                     <a class="nav-link active">
@@ -158,6 +163,7 @@
                     </ul>
                 </li>
                 <!--Role Navigator Link End-->
+
                 <!--Order Navigator Link-->
                 <li class="nav-item menu-open">
                     <a class="nav-link active">
@@ -180,15 +186,28 @@
                 </li>
                 <!--Order Navigator Link End-->
 
-                <li class="nav-item">
-                    <a asp-route="default" class="nav-link">
-                        <i class="nav-icon fas fa-arrow-left"></i>
+                <!--COntact Navigator Link-->
+                <li class="nav-item menu-open">
+                    <a class="nav-link active">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Return To Customers Page
-                            <span class="right badge badge-danger">New</span>
+                            Contact Management
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-controller="Contact" asp-action="Index" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>View List</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
                 </li>
+                <!--COntact Navigator Link End-->
+
 
             </ul>
         </nav>

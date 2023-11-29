@@ -1,0 +1,155 @@
+﻿@model KhaccThienn_Ecommerce.Models.ViewModels.UpdateAccountViewModels
+
+@{
+    ViewData["Title"] = "Details Account";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="iq-card">
+                <div class="iq-card-body p-0">
+                    <div class="iq-edit-list">
+                        <ul class="iq-edit-profile d-flex nav nav-pills">
+                            <li class="col-md-6 p-0 ">
+                                <a class="nav-link active" data-toggle="pill" href="#personal-information">
+                                    Personal Information
+                                </a>
+                            </li>
+                            <li class="col-md-6 p-0">
+                                <a class="nav-link text-dark" data-toggle="pill" href="#chang-pwd">
+                                    Change Password
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 mt-4">
+            <div class="iq-edit-list-data">
+                <div class="tab-content">
+
+                    <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                        <div class="iq-card">
+                            <div class="iq-card-body">
+
+                                <form asp-action="EditProfile" enctype="multipart/form-data" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <input type="hidden" asp-for="Id" />
+                                    <input type="hidden" asp-for="Created_Date" />
+                                    <input type="hidden" asp-for="RoleId" />
+                                    <input type="hidden" name="oldImage" value="@Model.Avatar" />
+                                    <input type="hidden" name="oldPassword" value="@Model.Password" />
+                                    <div class="form-group row align-items-center">
+                                        <div class="col-md-4">
+                                            <div class="profile-img-edit">
+                                                <img class="card-img" src="~/Uploads/user/@(string.IsNullOrEmpty(Model.Avatar) ? "default.png" : Model.Avatar)" alt="profile-pic">
+                                                <div class="p-image">
+                                                    <i class="ri-pencil-line upload-button"></i>
+                                                    <input class="file-upload" name="fileUpload" type="file" accept="image/*" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-6">
+                                            <label asp-for="FirstName" class="control-label"></label>
+                                            <input asp-for="FirstName" class="form-control" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            <label asp-for="LastName" class="control-label"></label>
+                                            <input asp-for="LastName" class="form-control" />
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-lg-12">
+                                            <label asp-for="Username" class="control-label"></label>
+                                            <input asp-for="Username" class="form-control" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-lg-6">
+                                            <label asp-for="Email" class="control-label"></label>
+                                            <input asp-for="Email" class="form-control" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            <label asp-for="Phone" class="control-label"></label>
+                                            <input asp-for="Phone" class="form-control" />
+                                            <span asp-validation-for="Phone" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-lg-12">
+                                            <label asp-for="Address" class="control-label"></label>
+                                            <textarea asp-for="Address" class="form-control"></textarea>
+                                            <span asp-validation-for="Address" class="text-danger"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="Save" class="btn btn-outline-secondary rounded-0 btn-block" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="chang-pwd" role="tabpanel">
+                        <div class="iq-card">
+                            
+                            <div class="iq-card-body">
+                                <form asp-action="ChangePassword" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <input type="hidden" asp-for="Id" />
+                                    <input type="hidden" asp-for="FirstName" />
+                                    <input type="hidden" asp-for="LastName" />
+                                    <input type="hidden" asp-for="Username" />
+                                    
+                                    <input type="hidden" asp-for="RoleId" />
+                                    <input type="hidden" name="oldPassword" value="@Model.Password" />
+                                    <input type="hidden" asp-for="Avatar" />
+                                    <input type="hidden" asp-for="Email" />
+                                    <input type="hidden" asp-for="Phone" />
+                                    <input type="hidden" asp-for="Address" />
+                                    <input type="hidden" asp-for="Created_Date" />
+
+                                    <div class="form-group">
+                                        <label for="cpass" asp-for="Password"></label>
+                                        <input type="Password" class="form-control" id="cpass" asp-for="Password">
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="npass" asp-for="NewPassword"></label>
+                                        <input type="Password" class="form-control" id="npass" asp-for="NewPassword">
+                                        <span asp-validation-for="NewPassword" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vpass" asp-for="ConfirmPassword"></label>
+                                        <input type="Password" class="form-control" id="vpass" asp-for="ConfirmPassword">
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-secondary rounded-0 btn-block mr-2">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

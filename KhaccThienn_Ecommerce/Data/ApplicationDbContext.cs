@@ -17,8 +17,8 @@ namespace KhaccThienn_Ecommerce.Data
             base.OnModelCreating(builder);
            
             builder.Entity<Role>().HasData(
-                new Role{ Id=0, Name= "Admin", Created_Date = DateTime.Now },
-                new Role { Id = 1, Name = "User", Created_Date = DateTime.Now } 
+                new Role{ Id=0, Name= "Admin", Created_Date = DateTime.Now, Descriptions = "Admin Of Application" },
+                new Role { Id = 1, Name = "User", Created_Date = DateTime.Now, Descriptions = "User Of Application" } 
                 );
 
             builder.Entity<Order>()
@@ -34,7 +34,7 @@ namespace KhaccThienn_Ecommerce.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<Cart> Carts { get; set; }
-
+        public DbSet<Cart> Carts { get; set; } 
+        public DbSet<Contact> Contacts { get; set; }
     }
 }
