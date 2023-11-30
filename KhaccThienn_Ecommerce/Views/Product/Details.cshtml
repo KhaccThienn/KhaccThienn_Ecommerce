@@ -184,24 +184,30 @@
                     </div>
                     @if (userFound != null)
                     {
-                        <form asp-controller="Cart" asp-action="AddToCart">
-                            <div class="quantity-content">
-                                <div class="left-content">
-                                    <h6>No. of Orders</h6>
-                                </div>
-                                <div class="right-content">
-                                    <div class="quantity buttons_added">
-                                        <input type="hidden" name="accId" value="@userFound.Id" />
-                                        <input type="hidden" name="prodId" value="@ViewBag.product.Id" />
-                                        <input type="button" value="-" class="minus" onclick="handleMinus();">
-                                        <input type="number" step="1" min="1" max="" name="quantity" value="1" id="quantity" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="">
-                                        <input type="button" value="+" class="plus" onclick="handlePlus();">
+                        @if (@ViewBag.product.Status == 0)
+                        {
+                            <a asp-controller="Product" asp-action="Index" >This Product Is Out Of Stock, Please Buy Another Product !</a>
+                        } else
+                        {
+                            <form asp-controller="Cart" asp-action="AddToCart">
+                                <div class="quantity-content">
+                                    <div class="left-content">
+                                        <h6>No. of Orders</h6>
                                     </div>
+                                    <div class="right-content">
+                                        <div class="quantity buttons_added">
+                                            <input type="hidden" name="accId" value="@userFound.Id" />
+                                            <input type="hidden" name="prodId" value="@ViewBag.product.Id" />
+                                            <input type="button" value="-" class="minus" onclick="handleMinus();">
+                                            <input type="number" step="1" min="1" max="" name="quantity" value="1" id="quantity" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="">
+                                            <input type="button" value="+" class="plus" onclick="handlePlus();">
+                                        </div>
+                                    </div>
+                                    <div><button class="btn btn-outline-secondary btn-sm btn-block main-button-border rounded-0 mt-3" type="submit">Add To Cart</button></div>
                                 </div>
-                                <div><button class="btn btn-outline-secondary btn-sm btn-block main-button-border rounded-0 mt-3" type="submit">Add To Cart</button></div>
-                            </div>
-
-                        </form>
+                            </form>
+                        }
+                        
 
                     }
                     else
