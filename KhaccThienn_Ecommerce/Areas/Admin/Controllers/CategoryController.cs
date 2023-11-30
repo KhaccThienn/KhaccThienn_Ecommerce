@@ -220,6 +220,7 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 {
                     category.Updated_Date = DateTime.Now;
                     _context.Update(category);
+                    _toastNotification.Success("Category Updated !", 3);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -235,6 +236,7 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            _toastNotification.Error("Category Failed !", 3);
             return View(category);
         }
 
@@ -273,6 +275,7 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 
                 if (category?.Products?.Count > 0)
                 {
+                    _toastNotification.Error("Delete Category Failed !", 3);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -283,6 +286,8 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                         System.IO.File.Delete(path);
                         Console.WriteLine("File deleted successfully.");
                         _context.Categories.Remove(category);
+                        _toastNotification.Success("Delete Category successfully !", 3);
+
                     }
                     catch (IOException e)
                     {

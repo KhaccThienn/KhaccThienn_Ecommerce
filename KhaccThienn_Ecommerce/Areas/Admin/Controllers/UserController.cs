@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using KhaccThienn_Ecommerce.Models.ViewModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
 {
@@ -21,13 +22,14 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _environment;
-        private IMapper _mapper;
-
-        public UserController(ApplicationDbContext context, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment, IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly INotyfService _notify;
+        public UserController(ApplicationDbContext context, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment, IMapper mapper, INotyfService service)
         {
             _context = context;
             _environment = environment;
             _mapper = mapper;
+            _notify = service;
         }
 
         // GET: Admin/User
@@ -165,8 +167,10 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 user.Created_Date = DateTime.Now;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                _notify.Success("Added User !", 3);
                 return RedirectToAction(nameof(Index));
             }
+            _notify.Error("Add User Failed !", 3);
             return View(user);
         }
 
@@ -264,6 +268,8 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                     var userMapper = _mapper.Map<User>(user);
                     userMapper.Password = user.NewPassword;
                     _context.Update(userMapper);
+
+                    _notify.Success("Updated User !", 3);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -280,6 +286,8 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.RoleId = new SelectList(_context.Roles, "Id", "Name", user.RoleId);
+            _notify.Success("Updat User Failed !", 3);
+
             return View(user);
         }
 
@@ -313,9 +321,22 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
             var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.Users.Remove(user);
+                var rootPath = _environment.ContentRootPath;
+                var path = Path.Combine(rootPath, "wwwroot", "Uploads", "user", user?.Avatar);
+                try
+                {
+                    // Attempt to delete the file
+                    System.IO.File.Delete(path);
+                    Console.WriteLine("File deleted successfully.");
+                    _context.Users.Remove(user);
+                    _notify.Success("Deleted User !", 3);
+                }
+                catch (IOException e)
+                {
+                    // Handle any exceptions that may occur during the file deletion
+                    Console.WriteLine($"Error deleting file: {e.Message}");
+                }
             }
-
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

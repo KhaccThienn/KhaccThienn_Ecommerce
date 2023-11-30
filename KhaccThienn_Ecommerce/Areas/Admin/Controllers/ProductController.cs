@@ -9,6 +9,7 @@ using KhaccThienn_Ecommerce.Data;
 using KhaccThienn_Ecommerce.Models.DataModels;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
 {
@@ -17,11 +18,13 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotyfService _toast;
         private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _environment;
-        public ProductController(ApplicationDbContext context, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment)
+        public ProductController(ApplicationDbContext context, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment, INotyfService service)
         {
             _context = context;
             _environment = environment;
+            _toast = service;
         }
 
         // GET: Admin/Product
@@ -147,8 +150,11 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 product.Created_Date = DateTime.Now;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                _toast.Success("Added Product !", 3);
                 return RedirectToAction(nameof(Index));
             }
+            _toast.Error("Add Product Failed !", 3);
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
@@ -222,6 +228,8 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 {
                     product.Updated_Date = DateTime.Now;
                     _context.Update(product);
+                    _toast.Success("Updated Product !", 3);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -237,7 +245,9 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", product.CategoryId);
+            _toast.Error("Update Product Failed !", 3);
+
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -283,6 +293,8 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                     // Attempt to delete the file
                     System.IO.File.Delete(path);
                     Console.WriteLine("File deleted successfully.");
+                    _toast.Success("Deleted Product !", 3);
+
                     _context.Products.Remove(product);
                 }
                 catch (IOException e)

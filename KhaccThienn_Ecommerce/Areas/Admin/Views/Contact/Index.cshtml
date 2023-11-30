@@ -73,7 +73,7 @@
                 </td>
                 <td>
                     <a href="mailto:@item.Email" class="btn btn-outline-success rounded-0">Reply Contact</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger rounded-0">Delete</a>
+                    <a asp-area="Admin" asp-controller="Contact" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger rounded-0">Delete</a>
                 </td>
             </tr>
         }

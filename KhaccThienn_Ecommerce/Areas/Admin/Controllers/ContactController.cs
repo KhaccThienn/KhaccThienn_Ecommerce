@@ -100,5 +100,28 @@ namespace KhaccThienn_Ecommerce.Areas.Admin.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (_context.Contacts == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Contacts'  is null.");
+            }
+
+            var reviewFound = await _context.Contacts.FirstOrDefaultAsync(x => x.Id == id);
+            if (reviewFound != null)
+            {
+                _context.Remove(reviewFound);
+                _toastNotification.Success("Removed Contact Information", 3);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+
+            }
+            _toastNotification.Error("Remove Contact Information Failed", 3);            
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
